@@ -1,5 +1,15 @@
+<script context="module">
+	export function preload({ params, query }) {
+		return this.fetch(`blog.json`).then(r => r.json()).then(posts => {
+			return { posts };
+		});
+	}
+</script>
+
 <script>
   import { onMount } from 'svelte';
+
+  export let posts;
 
   onMount(() => {
     if (window.netlifyIdentity) {
@@ -53,11 +63,8 @@
 	<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </svelte:head>
 
-<h1>Great success!</h1>
-
-<figure>
-	<img alt='Borat' src='uploads/great-success.png'>
-	<figcaption>HIGH FIVE!</figcaption>
-</figure>
-
-<p><strong>Try editing this file (src/routes/index.svelte) to test live reloading.</strong></p>
+<ul>
+	{#each posts as post}
+		<li><article><a rel='prefetch' href='blog/{post.slug}'>{post.title}</a></article></li>
+	{/each}
+</ul>
