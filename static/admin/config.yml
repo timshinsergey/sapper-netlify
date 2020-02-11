@@ -12,55 +12,328 @@ media_folder: static/uploads
 public_folder: /uploads
 
 collections:
-  - name: "blog"
-    label: "Blog"
-    folder: "posts"
+  - name: blog
+    label: Статьи
+    folder: posts
     create: true
-    slug: "{{slug}}"
+    slug: '{{slug}}'
     fields:
-      - {label: "Template Key", name: "templateKey", widget: "hidden", default: "blog-post"}
-      - {label: "Title", name: "title", widget: "string"}
-      - {label: "Publish Date", name: "date", widget: "datetime"}
-      - {label: "Description", name: "description", widget: "text"}
-      - {label: "Featured Post", name: "featuredpost", widget: "boolean"}
-      - {label: "Featured Image", name: "featuredimage", widget: image}
-      - {label: "Body", name: "body", widget: "markdown"}
-      - {label: "Tags", name: "tags", widget: "list"}
+      - {
+          label: Ключ шаблона,
+          name: templateKey,
+          widget: hidden,
+          default: blog-post,
+        }
+      - { label: Дата публикации, name: date, widget: datetime }
+      - label: Статус
+        name: status
+        widget: select
+        options: ['Published', 'Featured', 'Draft']
+        default: Published
+      - label: Категории
+        name: categories
+        widget: list
+        required: false
+        fields:
+          - label: Категория
+            name: category
+            widget: relation
+            collection: postCategories
+            searchFields: ['title']
+            valueField: title
+      - { label: Тэги, name: tags, widget: list }
+      - { label: Заголовок, name: title, widget: string }
+      - { label: Описание, name: description, widget: text }
+      - { label: Featured Post, name: featuredpost, widget: boolean }
+      - { label: Featured Image, name: featuredimage, widget: image }
+      - { label: Тело статьи, name: body, widget: markdown }
+      - label: Мета информация
+        required: false
+        name: meta
+        widget: object
+        fields:
+          - { label: Заголовок, name: title, widget: string, required: false }
+          - {
+              label: Описание,
+              name: description,
+              widget: text,
+              required: false,
+              pattern: ['.{,300}', 'Не должно превышать 300 символов'],
+            }
+          - {
+              label: Каноническая ссылка,
+              name: canonicalLink,
+              widget: string,
+              required: false,
+            }
+          - { label: Noindex, name: noindex, widget: boolean, required: false }
 
-  - name: "pages"
-    label: "Pages"
+  - name: pages
+    label: Страницы
     files:
-      - file: "src/pages/index.md"
-        label: "Landing Page"
-        name: "index"
+      - file: src/pages/index.md
+        label: Посадочная страница
+        name: index
         fields:
-          - {label: "Template Key", name: "templateKey", widget: "hidden", default: "index-page"}
-          - {label: Title, name: title, widget: string}
-          - {label: Image, name: image, widget: image}
-          - {label: Heading, name: heading, widget: string}
-          - {label: Subheading, name: subheading, widget: string}
-          - {label: Mainpitch, name: mainpitch, widget: object, fields: [{label: Title, name: title, widget: string}, {label: Description, name: description, widget: text}]}
-          - {label: Description, name: description, widget: string}
-          - {label: Intro, name: intro, widget: object, fields: [{label: Heading, name: heading, widget: string}, {label: Description, name: description, widget: text}, {label: Blurbs, name: blurbs, widget: list, fields: [{label: Image, name: image, widget: image}, {label: Text, name: text, widget: text}]}]}
-          - {label: Main, name: main, widget: object, fields: [{label: Heading, name: heading, widget: string}, {label: Description, name: description, widget: text}, {label: Image1, name: image1, widget: object, fields: [{label: Image, name: image, widget: image}, {label: Alt, name: alt, widget: string}]}, {label: Image2, name: image2, widget: object, fields: [{label: Image, name: image, widget: image}, {label: Alt, name: alt, widget: string}]}, {label: Image3, name: image3, widget: object, fields: [{label: Image, name: image, widget: image}, {label: Alt, name: alt, widget: string}]}]}
-      - file: "src/pages/about/index.md"
-        label: "About"
-        name: "about"
+          - {
+              label: Template Key,
+              name: templateKey,
+              widget: hidden,
+              default: index-page,
+            }
+          - { label: Заголовок, name: title, widget: string }
+          - { label: Изображение, name: image, widget: image }
+          - { label: Heading, name: heading, widget: string }
+          - { label: Subheading, name: subheading, widget: string }
+          - {
+              label: Mainpitch,
+              name: mainpitch,
+              widget: object,
+              fields:
+                [
+                  { label: Title, name: title, widget: string },
+                  { label: Description, name: description, widget: text },
+                ],
+            }
+          - { label: Description, name: description, widget: string }
+          - {
+              label: Intro,
+              name: intro,
+              widget: object,
+              fields:
+                [
+                  { label: Heading, name: heading, widget: string },
+                  { label: Description, name: description, widget: text },
+                  {
+                    label: Blurbs,
+                    name: blurbs,
+                    widget: list,
+                    fields:
+                      [
+                        { label: Image, name: image, widget: image },
+                        { label: Text, name: text, widget: text },
+                      ],
+                  },
+                ],
+            }
+          - {
+              label: Main,
+              name: main,
+              widget: object,
+              fields:
+                [
+                  { label: Heading, name: heading, widget: string },
+                  { label: Description, name: description, widget: text },
+                  {
+                    label: Image1,
+                    name: image1,
+                    widget: object,
+                    fields:
+                      [
+                        { label: Image, name: image, widget: image },
+                        { label: Alt, name: alt, widget: string },
+                      ],
+                  },
+                  {
+                    label: Image2,
+                    name: image2,
+                    widget: object,
+                    fields:
+                      [
+                        { label: Image, name: image, widget: image },
+                        { label: Alt, name: alt, widget: string },
+                      ],
+                  },
+                  {
+                    label: Image3,
+                    name: image3,
+                    widget: object,
+                    fields:
+                      [
+                        { label: Image, name: image, widget: image },
+                        { label: Alt, name: alt, widget: string },
+                      ],
+                  },
+                ],
+            }
+      - file: src/pages/about/index.md
+        label: About
+        name: about
         fields:
-          - {label: "Template Key", name: "templateKey", widget: "hidden", default: "about-page"}
-          - {label: "Title", name: "title", widget: "string"}
-          - {label: "Body", name: "body", widget: "markdown"}
-      - file: "src/pages/products/index.md"
-        label: "Products Page"
-        name: "products"
+          - {
+              label: Template Key,
+              name: templateKey,
+              widget: hidden,
+              default: about-page,
+            }
+          - { label: Title, name: title, widget: string }
+          - { label: Body, name: body, widget: markdown }
+      - file: src/pages/products/index.md
+        label: Products Page
+        name: products
         fields:
-          - {label: "Template Key", name: "templateKey", widget: "hidden", default: "product-page"}
-          - {label: Title, name: title, widget: string}
-          - {label: Image, name: image, widget: image}
-          - {label: Heading, name: heading, widget: string}
-          - {label: Description, name: description, widget: string}
-          - {label: Intro, name: intro, widget: object, fields: [{label: Heading, name: heading, widget: string}, {label: Description, name: description, widget: text}, {label: Blurbs, name: blurbs, widget: list, fields: [{label: Image, name: image, widget: image}, {label: Text, name: text, widget: text}]}]}
-          - {label: Main, name: main, widget: object, fields: [{label: Heading, name: heading, widget: string}, {label: Description, name: description, widget: text}, {label: Image1, name: image1, widget: object, fields: [{label: Image, name: image, widget: image}, {label: Alt, name: alt, widget: string}]}, {label: Image2, name: image2, widget: object, fields: [{label: Image, name: image, widget: image}, {label: Alt, name: alt, widget: string}]}, {label: Image3, name: image3, widget: object, fields: [{label: Image, name: image, widget: image}, {label: Alt, name: alt, widget: string}]}]}
-          - {label: Testimonials, name: testimonials, widget: list, fields: [{label: Quote, name: quote, widget: string}, {label: Author, name: author, widget: string}]}
-          - {label: Full_image, name: full_image, widget: image}
-          - {label: Pricing, name: pricing, widget: object, fields: [{label: Heading, name: heading, widget: string}, {label: Description, name: description, widget: string}, {label: Plans, name: plans, widget: list, fields: [{label: Plan, name: plan, widget: string}, {label: Price, name: price, widget: string}, {label: Description, name: description, widget: string}, {label: Items, name: items, widget: list}]}]}
+          - {
+              label: Template Key,
+              name: templateKey,
+              widget: hidden,
+              default: product-page,
+            }
+          - { label: Title, name: title, widget: string }
+          - { label: Image, name: image, widget: image }
+          - { label: Heading, name: heading, widget: string }
+          - { label: Description, name: description, widget: string }
+          - {
+              label: Intro,
+              name: intro,
+              widget: object,
+              fields:
+                [
+                  { label: Heading, name: heading, widget: string },
+                  { label: Description, name: description, widget: text },
+                  {
+                    label: Blurbs,
+                    name: blurbs,
+                    widget: list,
+                    fields:
+                      [
+                        { label: Image, name: image, widget: image },
+                        { label: Text, name: text, widget: text },
+                      ],
+                  },
+                ],
+            }
+          - {
+              label: Main,
+              name: main,
+              widget: object,
+              fields:
+                [
+                  { label: Heading, name: heading, widget: string },
+                  { label: Description, name: description, widget: text },
+                  {
+                    label: Image1,
+                    name: image1,
+                    widget: object,
+                    fields:
+                      [
+                        { label: Image, name: image, widget: image },
+                        { label: Alt, name: alt, widget: string },
+                      ],
+                  },
+                  {
+                    label: Image2,
+                    name: image2,
+                    widget: object,
+                    fields:
+                      [
+                        { label: Image, name: image, widget: image },
+                        { label: Alt, name: alt, widget: string },
+                      ],
+                  },
+                  {
+                    label: Image3,
+                    name: image3,
+                    widget: object,
+                    fields:
+                      [
+                        { label: Image, name: image, widget: image },
+                        { label: Alt, name: alt, widget: string },
+                      ],
+                  },
+                ],
+            }
+          - {
+              label: Testimonials,
+              name: testimonials,
+              widget: list,
+              fields:
+                [
+                  { label: Quote, name: quote, widget: string },
+                  { label: Author, name: author, widget: string },
+                ],
+            }
+          - { label: Full_image, name: full_image, widget: image }
+          - {
+              label: Pricing,
+              name: pricing,
+              widget: object,
+              fields:
+                [
+                  { label: Heading, name: heading, widget: string },
+                  { label: Description, name: description, widget: string },
+                  {
+                    label: Plans,
+                    name: plans,
+                    widget: list,
+                    fields:
+                      [
+                        { label: Plan, name: plan, widget: string },
+                        { label: Price, name: price, widget: string },
+                        {
+                          label: Description,
+                          name: description,
+                          widget: string,
+                        },
+                        { label: Items, name: items, widget: list },
+                      ],
+                  },
+                ],
+            }
+
+  - name: settings
+    label: Настройки
+    delete: false # Prevent users from deleting documents in this collection
+    editor:
+      preview: false
+    files:
+      - file: content/settings/global.yml
+        label: Глобальные настройки
+        name: global-settings
+        fields:
+          - { label: Заголовок сайта, name: siteTitle, widget: string }
+          - {
+              label: Ссылка на сайт,
+              name: siteUrl,
+              widget: string,
+              required: false,
+            }
+          - {
+              label: Описание сайта,
+              name: siteDescription,
+              widget: text,
+              required: false,
+            }
+          - label: Социальные сети
+            name: socialMediaCard
+            widget: object
+            fields:
+              - {
+                  label: Изображение,
+                  name: image,
+                  widget: image,
+                  required: false,
+                }
+              - {
+                  label: Аккаунт Твиттера,
+                  name: twitterSiteAccount,
+                  widget: string,
+                  required: false,
+                }
+              - {
+                  label: Аккаунт создателя ресурса,
+                  name: twitterCreatorAccount,
+                  widget: string,
+                  required: false,
+                }
+          - {
+              label: Header Meta / Scripts,
+              name: headerScripts,
+              widget: text,
+              required: false,
+            }
+          - {
+              label: Enable Service Worker Pre-Cache,
+              name: enableServiceWorker,
+              widget: boolean,
+              required: false,
+            }

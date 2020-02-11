@@ -24,7 +24,7 @@
   });
 </script>
 
-<style>
+<!-- <style>
 	h1, figure, p {
 		text-align: center;
 		margin: 0 auto;
@@ -56,7 +56,7 @@
 			font-size: 4em;
 		}
 	}
-</style>
+</style> -->
 
 <svelte:head>
 	<title>Sapper project template</title>
@@ -65,6 +65,11 @@
 
 <ul>
 	{#each posts as post}
-		<li><article><a rel='prefetch' href='blog/{post.slug}'>{post.title}</a></article></li>
+		<li>
+			<article>
+				<img src={post.image} alt=''>
+				<a rel='prefetch' href='blog/{post.slug}'>{post.title}</a>
+			</article>
+		</li>
 	{/each}
 </ul>
